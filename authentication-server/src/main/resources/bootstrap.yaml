@@ -1,0 +1,33 @@
+server:
+  port: 21004
+spring:
+  profiles:
+    active: dev
+  application:
+    name: authentication-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+      config:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+        extension-configs:
+          - dataId: authentication-server.yaml
+            refresh: true
+#  redis:
+#    jedis:
+#      pool:
+#        max-active: 8
+#        min-idle: 0
+#        max-idle: 8
+#        max-wait: 1
+#    timeout: 3000

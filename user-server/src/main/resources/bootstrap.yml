@@ -1,0 +1,33 @@
+server:
+  port: 21001
+spring:
+  application:
+    name: user-server
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+      config:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        file-extension: yml
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+        shared-configs:
+          - dataId: logstash.yml
+            refresh: true
+        extension-configs:
+          - dataId: user-server.yml
+            refresh: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #打印出sql语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,0 +1,29 @@
+server:
+  port: 20002
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+      config:
+        server-addr: 39.107.136.198:11104
+        username: nacos
+        password: znjs666@GWM
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: public-service-${spring.profiles.active}
+        shared-configs:
+          - dataId: logstash.yml
+            refresh: true
+        extension-configs:
+          - dataId: gateway.yaml
+            refresh: true
+
