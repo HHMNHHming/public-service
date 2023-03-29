@@ -8,15 +8,15 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 39.107.136.198:11104
+        server-addr: 127.0.0.1:8848
         username: nacos
-        password: znjs666@GWM
+        password: nacos
         group: DEFAULT_GROUP
         namespace: public-service-${spring.profiles.active}
       config:
-        server-addr: 39.107.136.198:11104
+        server-addr: 127.0.0.1:8848
         username: nacos
-        password: znjs666@GWM
+        password: nacos
         file-extension: yaml
         group: DEFAULT_GROUP
         namespace: public-service-${spring.profiles.active}

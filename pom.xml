@@ -16,6 +16,7 @@
         <module>gateway</module>
         <module>common/util</module>
         <module>common/entity</module>
+        <module>oauth2-server</module>
     </modules>
 
     <!-- 统一管理jar包版本 -->
