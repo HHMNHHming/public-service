@@ -1,6 +1,5 @@
 package com.gdc.avp.gateway.client;
 
-import com.alibaba.fastjson.JSONObject;
 import com.gwm.avpdatacloud.basicpackages.utils.ResultData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -12,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface AuthClient {
     @RequestMapping(value="/auth/check")
     ResultData check(@RequestHeader("Authorization") String authorization,
-                     @RequestHeader("uri") String uri);
-}
+                     @RequestHeader("Other-Auth") String via,
+                     @RequestHeader("uri") String uri);}

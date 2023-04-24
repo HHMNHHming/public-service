@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.gwm.avpdatacloud.basicpackages.log.GDCLog;
 import com.gwm.avpdatacloud.basicpackages.utils.ResultData;
 import com.nimbusds.jose.JWSObject;
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +31,10 @@ public class RedisSessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorization = request.getHeader("Authorization");
         String uri = request.getHeader("uri");
+        String via = request.getHeader("Other-Auth");
+        if(via!=null && !via.isEmpty()){
+            uri = via;
+        }
         //验证当前用户是否已经登录
         if (StringUtils.isNotEmpty(authorization)) {
             //权限验证
@@ -43,7 +48,9 @@ public class RedisSessionInterceptor implements HandlerInterceptor {
                 response401(response,null);
                 return false;
             }
+            //1、登录成功 2、token校验正确 3、优先使用otherAuth请求头进行判断
             redisTemplate.expire(userName, expire, TimeUnit.MINUTES);
+            // 角色名roleName是从登录后的用户的token里拿的
             JSONArray roles = userJsonObject.getJSONArray("authorities");
             String roleName = roles.getString(0);
             Object obj = redisTemplate.opsForHash().get("AUTH:RESOURCE_ROLES_MAP", uri);

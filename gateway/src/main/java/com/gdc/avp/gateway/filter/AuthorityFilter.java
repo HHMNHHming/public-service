@@ -36,6 +36,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,10 +87,18 @@ public class AuthorityFilter implements GlobalFilter, Ordered {
             return writeTo(exchange,ResultData.ERROR("Token不是有效值"));
         }
         //2、访问地址权限验证
+        //String via = request.getHeaders().getFirst(HttpHeaders.VIA);
+        //GDCLog.info("System","com.gdc.avp.gateway.filter.AuthorityFilter.filter():via",via);
+        //String otherAuth = String.valueOf(request.getHeaders().get("Other-Auth"));
+        //System.out.println(otherAuth); // 注意获取请求头的结果的小区别哦！
+        String otherAuth = request.getHeaders().getFirst("Other-Auth");
+        System.out.println(otherAuth);
         try{
-            Set<URI> requestUrls = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+            //Set<URI> requestUrls = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+            Set<URI>  requestUrls = Collections.singleton(exchange.getRequest().getURI());
+
             List<URI> urls = requestUrls.stream().limit(1).collect(Collectors.toList());
-            ResultData result = authClient.check(authorization,urls.get(0).getPath());
+            ResultData result = authClient.check(authorization,otherAuth,urls.get(0).getPath());
             if(result.getCode() != 200){
                 return writeTo(exchange,result);
             }
