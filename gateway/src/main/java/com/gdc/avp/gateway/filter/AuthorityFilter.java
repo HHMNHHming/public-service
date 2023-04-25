@@ -94,9 +94,12 @@ public class AuthorityFilter implements GlobalFilter, Ordered {
         String otherAuth = request.getHeaders().getFirst("Other-Auth");
         System.out.println(otherAuth);
         try{
-            //Set<URI> requestUrls = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
-            Set<URI>  requestUrls = Collections.singleton(exchange.getRequest().getURI());
-
+            Set<URI> requestUrls;
+            try {
+                requestUrls = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+            } catch (Exception e) {
+                requestUrls = Collections.singleton(exchange.getRequest().getURI());
+            }
             List<URI> urls = requestUrls.stream().limit(1).collect(Collectors.toList());
             ResultData result = authClient.check(authorization,otherAuth,urls.get(0).getPath());
             if(result.getCode() != 200){
